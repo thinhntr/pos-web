@@ -1,6 +1,7 @@
 import { MinusIcon, PlusIcon, SearchIcon } from '@heroicons/react/solid';
 import { Button, Checkbox, Label, Table, TextInput } from 'flowbite-react';
 import Head from 'next/head';
+import { useState } from 'react';
 import priceList from './api/price_list.json';
 
 const vndFormatter = new Intl.NumberFormat('vi-VN', {
@@ -9,8 +10,25 @@ const vndFormatter = new Intl.NumberFormat('vi-VN', {
 });
 
 const Home = () => {
+    const [products, setProducts] = useState([...priceList]);
+
+    function filter(e: React.ChangeEvent<HTMLInputElement>) {
+        const name = e.target.value.trim();
+        console.log(name);
+        if (!name.length) {
+            setProducts(priceList);
+        } else {
+            setProducts(
+                priceList.filter((product) => {
+                    console.log(product.name, name);
+                    return product.name.includes(name);
+                })
+            );
+        }
+    }
+
     return (
-        <div className="mx-auto flex max-w-2xl flex-col gap-8 px-4 pt-4 sm:px-6 md:px-8">
+        <div className="mx-auto flex max-w-2xl flex-col gap-8 p-4 sm:p-6 md:p-8">
             <Head>
                 <title>Point of sale</title>
             </Head>
@@ -22,6 +40,7 @@ const Home = () => {
                     id="product-input"
                     icon={SearchIcon}
                     placeholder="Quick search..."
+                    onInput={filter}
                 />
             </div>
 
@@ -36,7 +55,7 @@ const Home = () => {
                             <Table.HeadCell>Quantity</Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
-                            {priceList.slice(0, 4).map((item) => (
+                            {[{}].map((item) => (
                                 <Table.Row key={item.name}>
                                     <Table.Cell>{item.name}</Table.Cell>
                                     <Table.Cell>
@@ -77,7 +96,7 @@ const Home = () => {
                             <Table.HeadCell>Buy</Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
-                            {priceList.slice(0, 20).map((item) => (
+                            {products.map((item) => (
                                 <Table.Row key={item.name}>
                                     <Table.Cell>{item.name}</Table.Cell>
                                     <Table.Cell>
