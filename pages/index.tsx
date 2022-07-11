@@ -55,7 +55,7 @@ const Home = () => {
                             <Table.HeadCell>Quantity</Table.HeadCell>
                         </Table.Head>
                         <Table.Body className="divide-y">
-                            {[{}].map((item) => (
+                            {products.slice(3).map((item) => (
                                 <Table.Row key={item.name}>
                                     <Table.Cell>{item.name}</Table.Cell>
                                     <Table.Cell>
